@@ -11,6 +11,7 @@ IPAddress gateway  (192, 168,  20,   1);
 IPAddress subnet   (255, 255, 255,   0);
 
 httpd_handle_t web_server = NULL;
+extern WifiLogger wifi_logger;
 
 // Wifi and Server Inits
 esp_err_t init_wifi() {
@@ -82,8 +83,15 @@ esp_err_t index_handler(httpd_req_t *req) {
 
 esp_err_t wifi_logger_handler(httpd_req_t *req) { // Not sure...
     const char *TAG = "wifi_logger_handler";
+    wifi_logger.print();
+
     httpd_resp_set_type(req, "text/plain");
-    return httpd_resp_send(req, wifi_buf, strlen(wifi_buf));
+    esp_err_t ret = httpd_resp_send(req,
+                                    wifi_logger._wifi_buf,
+                                    wifi_logger._buf_len);
+
+    wifi_logger.flush();
+    return ret;
 }
 
 esp_err_t params_handler(httpd_req_t *req) {
