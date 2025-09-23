@@ -12,6 +12,6 @@ void setup() {
 }
 
 void loop() {
-    Serial.println("Hello world!");
+    user_logger("loop", "Hello world!");
     vTaskDelay(pdMS_TO_TICKS(1000));
 }
